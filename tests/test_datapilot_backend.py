@@ -70,7 +70,9 @@ def test_health_endpoint():
     from backend_app.app import create_app
 
     app = create_app()
-    health_route = next(route for route in app.routes if route.path == "/health")
+    health_route = next(
+        route for route in app.routes if getattr(route, "path", None) == "/health"
+    )
     payload = asyncio.run(health_route.endpoint())
 
     assert payload["status"] == "ok"
