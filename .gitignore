@@ -1,0 +1,46 @@
+# System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Python files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environment
+.venv/
+
+# IDE
+.idea/
+.cursor/
+.vscode/
+.trae/
+
+#other
+**/.claude/
+**/workspace/
+**/CLAUDE.md
+**/logs/
+*.env
+*.env.local
+*.env.development
+*.env.production
+*.env.test
+
+# Model weights and local model storage
+models/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.gguf
+
+# Local reproduction artifacts
+.repro-logs/
+*.partial.zip
+DeepAnalyze-main*.zip
