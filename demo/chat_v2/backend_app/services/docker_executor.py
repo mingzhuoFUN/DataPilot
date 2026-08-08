@@ -10,8 +10,8 @@ from pathlib import Path, PurePosixPath
 from ..settings import settings
 
 
-MANAGED_LABEL_KEY = "deepanalyze.managed"
-SESSION_LABEL_KEY = "deepanalyze.session"
+MANAGED_LABEL_KEY = "datapilot.managed"
+SESSION_LABEL_KEY = "datapilot.session"
 
 
 @dataclass
@@ -61,7 +61,7 @@ def _sanitize_session_id(session_id: str) -> str:
 
 
 def _container_name_for_session(session_id: str) -> str:
-    prefix = settings.docker_container_name.strip() or "deepanalyze-chat-exec"
+    prefix = settings.docker_container_name.strip() or "datapilot-exec"
     suffix = _sanitize_session_id(session_id)
     return f"{prefix}-{suffix}"[:120]
 
@@ -168,7 +168,7 @@ def ensure_execution_backend_ready(session_id: str | None = None) -> None:
         if not _image_exists(settings.docker_image):
             raise RuntimeError(
                 "Docker image not found. Build it first with "
-                "`docker build -t deepanalyze-chat-exec:latest -f Dockerfile.exec .`"
+                "`docker build -t datapilot-exec:latest -f Dockerfile.exec .`"
             )
 
         _run_docker_command(

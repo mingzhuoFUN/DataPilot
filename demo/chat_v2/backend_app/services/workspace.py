@@ -22,8 +22,13 @@ from ..settings import PREVIEWABLE_EXTENSIONS, settings
 GENERATED_INDEX_FILENAME = ".deepanalyze_generated.json"
 
 
+def sanitize_session_id(session_id: str) -> str:
+    normalized = re.sub(r"[^a-zA-Z0-9_-]+", "-", (session_id or "default").strip())
+    return normalized.strip("-_")[:64] or "default"
+
+
 def get_session_workspace(session_id: str) -> str:
-    safe_session_id = (session_id or "default").strip() or "default"
+    safe_session_id = sanitize_session_id(session_id)
     session_dir = Path(settings.workspace_base_dir) / safe_session_id
     session_dir.mkdir(parents=True, exist_ok=True)
     return str(session_dir)
@@ -694,6 +699,8 @@ def delete_workspace_dir(session_id: str, relative_path: str, recursive: bool = 
 
 
 async def proxy_external_file(url: str) -> Response:
+    if not settings.allow_external_proxy:
+        raise HTTPException(status_code=403, detail="External proxy is disabled")
     try:
         async with httpx.AsyncClient(follow_redirects=True, timeout=15) as client:
             response = await client.get(url)
@@ -723,6 +730,10 @@ async def _save_uploads(
             continue
         dst = uniquify_path(target_dir / filename)
         content = await file.read()
+        max_bytes = max(1, settings.max_upload_mb) * 1024 * 1024
+        if len(content) > max_bytes:
+            rejected.append(filename)
+            continue
         with open(dst, "wb") as buffer:
             buffer.write(content)
         saved.append(

@@ -37,6 +37,11 @@ def execute_code_safe(
         child_env.setdefault("MPLBACKEND", "Agg")
         child_env.setdefault("QT_QPA_PLATFORM", "offscreen")
         child_env.pop("DISPLAY", None)
+        # Generated analysis code must never inherit server credentials.
+        for env_name in list(child_env):
+            upper_name = env_name.upper()
+            if any(marker in upper_name for marker in ("API_KEY", "TOKEN", "SECRET", "PASSWORD")):
+                child_env.pop(env_name, None)
 
         completed = subprocess.run(
             [sys.executable, tmp_path],

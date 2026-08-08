@@ -1,19 +1,21 @@
 /** @type {import('next').NextConfig} */
 const backendBaseUrl =
-  (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8200").replace(
+  (process.env.DATAPILOT_BACKEND_INTERNAL_URL || "http://localhost:8200").replace(
     /\/+$/,
     ""
   );
 
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  output: "standalone",
   images: {
     unoptimized: true,
   },
   async rewrites() {
     return [
+      {
+        source: "/api/:path*",
+        destination: `${backendBaseUrl}/:path*`,
+      },
       {
         source: "/workspace/download",
         destination: `${backendBaseUrl}/workspace/download`,

@@ -14,6 +14,12 @@ wheels/
 # Virtual environment
 .venv/
 
+# JavaScript build artifacts
+node_modules/
+.next/
+coverage/
+demo/chat_v2/frontend/public/monaco-editor/
+
 # IDE
 .idea/
 .cursor/
@@ -42,5 +48,7 @@ models/
 
 # Local reproduction artifacts
 .repro-logs/
+.local-logs/
+.pytest_cache/
 *.partial.zip
 DeepAnalyze-main*.zip

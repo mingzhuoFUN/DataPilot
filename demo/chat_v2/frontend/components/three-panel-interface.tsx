@@ -476,14 +476,14 @@ const ChatMessageItem = memo(
         ) : (
           <div className="flex items-start gap-2 min-w-0">
             <Avatar>
-              <AvatarImage src="/placeholder-logo.png" alt="AI Assistant" />
+              <AvatarImage src="/datapilot-mark.svg" alt="DataPilot" />
               <AvatarFallback className="text-[10px]">
                 <Sparkles className="h-3 w-3" />
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1 message-appear">
               <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
-                Assistant
+                DataPilot
               </div>
               <div className="space-y-4 min-w-0">
                 {isStreaming ? (
@@ -988,7 +988,7 @@ export function ThreePanelInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-1",
-      content: "Hello! I'm DeepAnalyze-8B, your autonomous data science assistant. Upload your data and let's explore it together!",
+      content: "Hello! I'm DataPilot, your autonomous data analysis workspace. Upload a dataset, choose a model provider, and let's turn it into evidence-backed insights.",
       sender: "ai",
       timestamp: new Date(),
       localOnly: true,
@@ -1263,7 +1263,7 @@ export function ThreePanelInterface() {
     }
     const welcome: Message = {
       id: `welcome-${Date.now()}`,
-      content: "Hello! I'm DeepAnalyze-8B, your autonomous data science assistant. Upload your data and let's explore it together!",
+      content: "Hello! I'm DataPilot, your autonomous data analysis workspace. Upload a dataset, choose a model provider, and let's turn it into evidence-backed insights.",
       sender: "ai",
       timestamp: new Date(),
       localOnly: true,
@@ -1447,8 +1447,8 @@ export function ThreePanelInterface() {
       modelName: uiLanguage === "zh" ? "模型名称" : "Model Name",
       modelNamePlaceholder:
         uiLanguage === "zh"
-          ? "例如：DeepAnalyze-8B 或 gpt-4o-mini"
-          : "For example: DeepAnalyze-8B or gpt-4o-mini",
+          ? "例如：DeepAnalyze-8B 或其他兼容模型"
+          : "For example: DeepAnalyze-8B or another compatible model",
       temperature: uiLanguage === "zh" ? "温度" : "Temperature",
       temperatureHint:
         uiLanguage === "zh"
@@ -5310,13 +5310,22 @@ export function ThreePanelInterface() {
           <ResizablePanel defaultSize={30} minSize={20}>
             <div className="flex flex-col min-h-0 min-w-0 h-full bg-white/80 dark:bg-gray-950/80 border-r border-gray-200/70 dark:border-gray-800/70">
               <div className="flex items-start justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 shrink-0">
-                <div>
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-500/10 ring-1 ring-cyan-500/20">
+                    <img src="/datapilot-mark.svg" alt="DataPilot" className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <div className="mb-1 flex items-center gap-2">
+                      <span className="text-sm font-bold tracking-tight text-slate-950 dark:text-white">DataPilot</span>
+                      <span className="rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-300">Agent</span>
+                    </div>
                   <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                     {textLabels.workspace}
                   </h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {textLabels.workspaceHint}
                   </p>
+                  </div>
                 </div>
                 <div className="flex items-center gap-1">
                   <input

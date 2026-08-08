@@ -9,9 +9,13 @@ import { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "DataPilot — Autonomous Data Analysis",
+  description:
+    "Upload data, execute analysis code, inspect charts, and export reports with a model-powered data analysis agent.",
+  applicationName: "DataPilot",
+  icons: {
+    icon: "/datapilot-mark.svg",
+  },
 };
 
 export default function RootLayout({
@@ -21,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       suppressHydrationWarning
     >

@@ -25,7 +25,7 @@ RUN mkdir -p /etc/fonts/conf.d && \
     '    </prefer>' \
     '  </alias>' \
     '</fontconfig>' \
-    > /etc/fonts/conf.d/99-deepanalyze-simhei.conf && \
+    > /etc/fonts/conf.d/99-datapilot-simhei.conf && \
     fc-cache -f
 
 RUN python -m pip install --no-cache-dir \
@@ -42,12 +42,12 @@ RUN python -m pip install --no-cache-dir \
     python-docx \
     pillow
 
-RUN mkdir -p /usr/share/fonts/truetype/deepanalyze && \
+RUN mkdir -p /usr/share/fonts/truetype/datapilot && \
     python - <<'PY'
 from fontTools.ttLib import TTCollection
 
 source = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"
-target = "/usr/share/fonts/truetype/deepanalyze/SimHei.ttf"
+target = "/usr/share/fonts/truetype/datapilot/SimHei.ttf"
 
 collection = TTCollection(source)
 font = collection.fonts[0]

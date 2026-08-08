@@ -1,0 +1,31 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONUTF8=1 \
+    MPLBACKEND=Agg \
+    NO_PROXY=localhost,127.0.0.1,mock,backend
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      curl \
+      libgomp1 \
+      fontconfig \
+      fonts-wqy-zenhei \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend.py ./backend.py
+COPY backend_app ./backend_app
+
+RUN mkdir -p /app/workspace
+
+EXPOSE 8200
+
+HEALTHCHECK --interval=20s --timeout=5s --retries=5 \
+  CMD curl --fail http://localhost:8200/health || exit 1
+
+CMD ["uvicorn", "backend_app.app:app", "--host", "0.0.0.0", "--port", "8200"]

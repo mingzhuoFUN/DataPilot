@@ -97,11 +97,20 @@ def _normalize_temperature(value: Any) -> float:
 
 def build_chat_runtime_config(payload: dict[str, Any] | None) -> ChatRuntimeConfig:
     body = payload or {}
-    provider = str(body.get("provider") or "local").strip().lower() or "local"
+    client_config_enabled = settings.allow_client_provider_config
+    provider = str(
+        (body.get("provider") if client_config_enabled else "")
+        or settings.default_provider
+        or "local"
+    ).strip().lower()
     if provider not in {"local", "heywhale", "custom"}:
         provider = "local"
 
-    api_base = str(body.get("api_base") or "").strip()
+    api_base = str(
+        (body.get("api_base") if client_config_enabled else "")
+        or settings.api_base
+        or ""
+    ).strip()
     if provider == "heywhale" and not api_base:
         api_base = HEYWHALE_API_BASE
     if provider == "custom" and not api_base:
@@ -110,8 +119,16 @@ def build_chat_runtime_config(payload: dict[str, Any] | None) -> ChatRuntimeConf
     if provider in {"local", "heywhale"}:
         model = FIXED_MODEL_NAME
     else:
-        model = str(body.get("model") or FIXED_MODEL_NAME).strip() or FIXED_MODEL_NAME
-    api_key = str(body.get("api_key") or "").strip()
+        model = str(
+            (body.get("model") if client_config_enabled else "")
+            or settings.model_path
+            or FIXED_MODEL_NAME
+        ).strip()
+    api_key = str(
+        (body.get("api_key") if client_config_enabled else "")
+        or settings.model_api_key
+        or ""
+    ).strip()
     if provider == "heywhale" and not api_key:
         raise ValueError("HeyWhale API key is required")
 

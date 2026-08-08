@@ -1,96 +1,101 @@
 # DataPilot
 
-DataPilot is a web-based autonomous data analysis agent built on the open-source
-DeepAnalyze project. It lets users upload data files, ask analytical questions,
-stream model reasoning and Python execution, preview generated charts, and export
-analysis reports from a browser.
+[![CI](https://github.com/mingzhuoFUN/DataPilot/actions/workflows/ci.yml/badge.svg)](https://github.com/mingzhuoFUN/DataPilot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-0ea5e9.svg)](LICENSE)
 
-> Status: initial public baseline. The upstream application is preserved while
-> the independent branding, provider configuration, deployment workflow, and
-> portfolio documentation are developed incrementally.
+DataPilot 是一个可在浏览器中使用的自主数据分析工作台。用户可以上传 CSV、Excel、数据库或文档，以自然语言描述任务，并查看模型的流式分析、Python 执行、图表与可下载报告。
 
-## What is included
+本仓库以 [ruc-datalab/DeepAnalyze](https://github.com/ruc-datalab/DeepAnalyze) 的开源代码为基础，保留其模型协议、训练和评测资源，在此基础上完成独立品牌、Web 产品化、远程模型配置、安全边界、容器化和持续集成。项目不声称训练了 DeepAnalyze-8B，详细归属见 [UPSTREAM.md](UPSTREAM.md)。
 
-- Next.js WebUI v2
-- FastAPI backend and file service
-- CSV, Excel, database, text, and document workspaces
-- Streaming `<Analyze>`, `<Code>`, `<Execute>`, and `<Answer>` sections
-- Local or Docker-based Python execution
-- Generated chart and file previews
-- Markdown and PDF report export
-- Local, HeyWhale, and custom OpenAI-compatible model providers
-- Mock vLLM service for development without model weights
-- Training and evaluation resources retained from the upstream repository
+![DataPilot Web workspace](docs/assets/datapilot-web.png)
 
-## Quick start without model weights
+## 已完成能力
 
-The repository contains a mock vLLM service, so the application pipeline can be
-tested before connecting a real model.
+- 三栏式 Next.js 数据分析工作台与响应式品牌界面
+- FastAPI 文件、对话、代码执行、预览和报告导出 API
+- CSV / XLSX / SQLite / 文本 / 文档工作区
+- `<Analyze>`、`<Code>`、`<Execute>`、`<Answer>` 流式协议解析
+- OpenAI 兼容远程 API，可由服务端统一锁定配置
+- 无权重 mock provider，可完整演示上传、流式响应和报告生成
+- Nginx + frontend + backend + mock 的 Docker Compose 一键编排
+- 上传限制、会话目录净化、外部代理关闭、执行环境密钥剥离
+- Pytest、Python compile、Next.js production build 和 Compose CI
 
-Requirements:
+## 最快启动：不下载模型权重
 
-- Python 3.12
-- Node.js compatible with the bundled Next.js version
+安装 Docker Desktop 后执行：
 
-Start the mock model:
+```bash
+git clone https://github.com/mingzhuoFUN/DataPilot.git
+cd DataPilot
+docker compose up --build
+```
+
+打开 <http://localhost:8080>。默认 mock 服务不需要 GPU、模型权重或 API key，它验证的是完整产品链路，不提供真实数据推理。
+
+## 接入远程模型 API
+
+复制环境变量模板：
+
+```bash
+cp .env.example .env
+```
+
+修改 `.env`：
+
+```dotenv
+DATAPILOT_MODEL_PROVIDER=custom
+DATAPILOT_MODEL_API_BASE=https://your-provider.example/v1
+DATAPILOT_MODEL_NAME=your-model-name
+DATAPILOT_MODEL_API_KEY=your-secret-key
+DATAPILOT_ALLOW_CLIENT_PROVIDER_CONFIG=false
+```
+
+然后执行 `docker compose up --build`。远程服务需要兼容 OpenAI `POST /v1/chat/completions` 流式接口。API key 只放在本地或云平台 Secret 中，禁止提交到 Git。
+
+## 本地开发
 
 ```powershell
+# 终端 1：无权重 mock
 python demo\mock_vllm\start_mock_vllmserver.py
-```
 
-Install and start WebUI v2:
-
-```powershell
-cd demo\chat_v2\frontend
-npm install
-cd ..
+# 终端 2：后端
+cd demo\chat_v2
 Copy-Item .env.example .env
-start.bat
+pip install -r requirements.txt
+python backend.py
+
+# 终端 3：前端
+cd demo\chat_v2\frontend
+npm ci
+npm run dev
 ```
 
-Then open `http://localhost:4000`.
+访问 <http://localhost:4000>。后端健康检查为 <http://localhost:8200/health>。
 
-On Windows, set these variables before starting if the console or local proxy
-causes startup errors:
+## 验证
 
-```powershell
-$env:PYTHONUTF8 = "1"
-$env:NO_PROXY = "localhost,127.0.0.1"
+```bash
+pytest
+cd demo/chat_v2/frontend && npm ci && npm run build
+cd ../../.. && docker compose config --quiet
 ```
 
-## Model providers
+本地已验证：4 个后端测试通过、Python 编译通过、Next.js 生产构建通过、Compose 配置通过，并以真实 CSV 完成上传 → 流式对话 → Markdown 报告生成的端到端冒烟测试。
 
-DataPilot can use:
+## 文档
 
-1. the bundled mock service for interface development;
-2. a custom OpenAI-compatible remote API;
-3. the DeepAnalyze API;
-4. a self-hosted DeepAnalyze-8B vLLM endpoint.
+- [系统架构](docs/ARCHITECTURE.md)
+- [部署与远程 API](docs/DEPLOYMENT.md)
+- [简历与面试说明](docs/PORTFOLIO.md)
+- [安全说明](SECURITY.md)
+- [上游归属](UPSTREAM.md)
+- [DeepAnalyze 原始 README](docs/UPSTREAM_README.md)
 
-Model weights are intentionally excluded from Git. They will later be deployed
-on persistent storage attached to a GPU server.
+## 权重与后续路线
 
-## Project roadmap
+当前阶段故意不下载或部署 DeepAnalyze-8B 权重。真实推理可先接入任意兼容协议的远程 API；未来再把 DeepAnalyze-8B 权重放到 GPU 云服务器的持久化磁盘，通过 vLLM 暴露同一接口，无需重写 Web 产品层。
 
-- [x] Preserve a runnable upstream baseline
-- [x] Verify the mock model, file upload, API, and code execution pipeline
-- [ ] Complete independent visual branding
-- [ ] Validate WebUI v2 with a custom remote model API
-- [ ] Add production Docker Compose deployment
-- [ ] Add CI and automated smoke tests
-- [ ] Publish an online demonstration
-- [ ] Add optional self-hosted DeepAnalyze-8B deployment
+## License
 
-## Upstream and license
-
-DataPilot is derived from
-[ruc-datalab/DeepAnalyze](https://github.com/ruc-datalab/DeepAnalyze). The original
-project and model were created by the DeepAnalyze authors at Renmin University of
-China and Tsinghua University.
-
-This repository retains the upstream MIT license and copyright notice. The
-DeepAnalyze-8B model was not trained by the DataPilot maintainer. See
-[UPSTREAM.md](UPSTREAM.md) and [LICENSE](LICENSE) for details.
-
-The original upstream README is preserved at
-[docs/UPSTREAM_README.md](docs/UPSTREAM_README.md).
+代码遵循仓库中的 [MIT License](LICENSE)。DeepAnalyze 名称、论文、模型和原始成果归其原作者所有。
