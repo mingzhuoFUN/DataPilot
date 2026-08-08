@@ -10,6 +10,12 @@ docker compose ps
 
 访问 `http://服务器IP:8080`。该模式使用仓库内 mock provider，适合验证 UI、文件工作区、流式协议和报告下载。
 
+### Render 一键部署
+
+仓库根目录的 `render.yaml` 与 `deploy/Dockerfile.all-in-one` 会把 Nginx、Next.js、FastAPI 和 mock provider 打包为一个 Web Service。在 Render 控制台选择 **New → Blueprint** 并连接此 GitHub 仓库即可创建演示服务。首次创建时可将 `DATAPILOT_MODEL_API_KEY` 留空；接入真实 API 时再在平台 Secret 中设置。
+
+单容器模式默认使用临时工作区，适合作品集演示。若需要长期保存用户文件，应选择持久磁盘并挂载到 `/app/workspace`。
+
 ## 方案 B：远程 OpenAI 兼容 API
 
 在 `.env` 或托管平台 Secret 中设置：
@@ -51,4 +57,4 @@ docker compose up --build -d
 
 ## 当前环境说明
 
-仓库的 Compose 配置已通过静态验证。若本机 Docker Desktop 的 Linux Engine 未启动，镜像构建会失败；启动 Docker Desktop 后重新运行 `docker compose up --build` 即可。公开云端 URL 还需要用户选择并授权具体云平台、域名和计费账户。
+仓库的 Compose 配置已通过静态验证，GitHub Actions 还会实际构建并启动单容器部署镜像进行健康检查。若本机 Docker Desktop 的 Linux Engine 未启动，镜像构建会失败；启动 Docker Desktop 后重新运行 `docker compose up --build` 即可。公开云端 URL 还需要用户在 Render 等平台授权 GitHub 仓库并确认服务创建。

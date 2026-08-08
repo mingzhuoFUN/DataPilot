@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: datapilot-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./deploy/Dockerfile.all-in-one
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 30
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: DATAPILOT_MODEL_PROVIDER
+        value: local
+      - key: DATAPILOT_MODEL_API_BASE
+        value: http://127.0.0.1:8000/v1
+      - key: DATAPILOT_MODEL_NAME
+        value: DeepAnalyze-8B
+      - key: DATAPILOT_ALLOW_CLIENT_PROVIDER_CONFIG
+        value: "false"
+      - key: DATAPILOT_MODEL_API_KEY
+        sync: false

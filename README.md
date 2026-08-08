@@ -96,6 +96,8 @@ cd ../../.. && docker compose config --quiet
 
 当前阶段故意不下载或部署 DeepAnalyze-8B 权重。真实推理可先接入任意兼容协议的远程 API；未来再把 DeepAnalyze-8B 权重放到 GPU 云服务器的持久化磁盘，通过 vLLM 暴露同一接口，无需重写 Web 产品层。
 
+仓库同时提供 `render.yaml` 与单容器 Dockerfile，可在 Render Blueprint 中创建无权重公开演示；创建云服务本身需要仓库所有者在 Render 中授权 GitHub。
+
 ## License
 
 代码遵循仓库中的 [MIT License](LICENSE)。DeepAnalyze 名称、论文、模型和原始成果归其原作者所有。

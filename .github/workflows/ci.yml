@@ -46,3 +46,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker compose config --quiet
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build all-in-one deployment image
+        run: docker build -f deploy/Dockerfile.all-in-one -t datapilot:ci .
+      - name: Run container smoke test
+        run: |
+          docker run --detach --name datapilot-ci -p 8080:8080 datapilot:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8080/api/health; then
+              curl --fail --silent http://127.0.0.1:8080/ | grep -q DataPilot
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs datapilot-ci
+          exit 1
+      - if: always()
+        run: docker rm --force datapilot-ci || true
