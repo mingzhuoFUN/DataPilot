@@ -58,7 +58,7 @@ jobs:
           docker run --detach --name datapilot-ci -p 8080:8080 datapilot:ci
           for attempt in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:8080/api/health; then
-              curl --fail --silent http://127.0.0.1:8080/ | grep -q DataPilot
+              curl --fail --silent http://127.0.0.1:8080/ | grep -q DeepAnalyze-8B
               exit 0
             fi
             sleep 2
