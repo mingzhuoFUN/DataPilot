@@ -5,13 +5,13 @@
 
 DataPilot 是一个可在浏览器中使用的自主数据分析工作台。用户可以上传 CSV、Excel、数据库或文档，以自然语言描述任务，并查看模型的流式分析、Python 执行、图表与可下载报告。
 
-本仓库以 [ruc-datalab/DeepAnalyze](https://github.com/ruc-datalab/DeepAnalyze) 的开源代码为基础，保留其模型协议、训练和评测资源，在此基础上完成独立品牌、Web 产品化、远程模型配置、安全边界、容器化和持续集成。项目不声称训练了 DeepAnalyze-8B，详细归属见 [UPSTREAM.md](UPSTREAM.md)。
+本仓库以 [ruc-datalab/DeepAnalyze](https://github.com/ruc-datalab/DeepAnalyze) 的开源代码为基础，保留其 WebUI 视觉基准、模型协议、训练和评测资源，在此基础上完成远程模型配置、安全边界、容器化和持续集成。项目不声称训练了 DeepAnalyze-8B，详细归属见 [UPSTREAM.md](UPSTREAM.md)。
 
-![DataPilot Web workspace](docs/assets/datapilot-web.png)
+![DeepAnalyze WebUI baseline in the packaged project](docs/assets/datapilot-web.png)
 
 ## 已完成能力
 
-- 三栏式 Next.js 数据分析工作台与响应式品牌界面
+- 基于上游 WebUI v2 视觉基准的三栏式 Next.js 数据分析工作台
 - FastAPI 文件、对话、代码执行、预览和报告导出 API
 - CSV / XLSX / SQLite / 文本 / 文档工作区
 - `<Analyze>`、`<Code>`、`<Execute>`、`<Answer>` 流式协议解析
