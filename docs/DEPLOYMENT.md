@@ -37,14 +37,30 @@ docker compose up --build -d
 
 `DATAPILOT_ALLOW_CLIENT_PROVIDER_CONFIG=false` 可阻止访客通过浏览器覆盖服务器模型地址与密钥。不要把真实 `.env` 提交到 GitHub。
 
-## 方案 C：未来 GPU 自托管权重
+## 方案 C：Windows 本地 GPU 权重（已验证）
+
+当前开发机已经使用 RTX 4060 Laptop 8GB、llama.cpp Vulkan 和 DeepAnalyze-8B Q4_K_M GGUF 跑通真实推理。权重与运行时位于 Git 仓库外。配置完成后，在仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start_local.ps1
+```
+
+打开 <http://127.0.0.1:4000>。模型、后端和前端分别监听本机 `8000`、`8200`、`4000` 端口。停止时执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\stop_local.ps1
+```
+
+详细配置见 `local_inference/README_ZH.md`。
+
+## 方案 D：未来 GPU 云端自托管权重
 
 1. 租用带 NVIDIA GPU 和持久化数据盘的云服务器。
 2. 把权重下载到数据盘，例如 `/data/models/DeepAnalyze-8B`，不要放进 Git 仓库。
 3. 用 vLLM 启动 OpenAI 兼容服务。
 4. 将 `DATAPILOT_MODEL_API_BASE` 指向该服务的 `/v1`。
 
-这一步只替换 provider，不改变前端、网关和业务后端。本项目当前不执行权重下载与 GPU 部署。
+这一步只替换 provider，不改变前端、网关和业务后端。本地权重部署已经完成，云端迁移留到公网演示的最后阶段。
 
 ## 生产检查清单
 

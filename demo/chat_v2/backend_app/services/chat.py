@@ -258,10 +258,10 @@ def _iter_local_stream(
         messages=conversation,
         temperature=runtime_config.temperature,
         stream=True,
+        max_tokens=1024,
         extra_body={
             "add_generation_prompt": False,
             "stop_token_ids": [151676, 151645],
-            "max_new_tokens": 32768,
         },
     )
     try:
