@@ -9,8 +9,8 @@ import { Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "DeepAnalyze WebUI",
-  description: "Autonomous data science assistant WebUI",
+  title: "DataPilot · Local Analysis Lab",
+  description: "A transparent, executable data-analysis workspace powered by a local model.",
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       suppressHydrationWarning
     >

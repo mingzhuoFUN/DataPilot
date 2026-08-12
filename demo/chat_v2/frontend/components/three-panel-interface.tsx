@@ -988,7 +988,7 @@ export function ThreePanelInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-1",
-      content: "Hello! I'm DeepAnalyze-8B, your autonomous data science assistant. Upload your data and let's explore it together!",
+      content: "Welcome aboard DataPilot. Upload a dataset and I’ll turn your question into a transparent analysis route: plan, code, execution, and a reusable report.",
       sender: "ai",
       timestamp: new Date(),
       localOnly: true,
@@ -1263,7 +1263,7 @@ export function ThreePanelInterface() {
     }
     const welcome: Message = {
       id: `welcome-${Date.now()}`,
-      content: "Hello! I'm DeepAnalyze-8B, your autonomous data science assistant. Upload your data and let's explore it together!",
+      content: "Welcome aboard DataPilot. Upload a dataset and I’ll turn your question into a transparent analysis route: plan, code, execution, and a reusable report.",
       sender: "ai",
       timestamp: new Date(),
       localOnly: true,
@@ -4147,7 +4147,7 @@ export function ThreePanelInterface() {
                   table.table_name && handlePreviewTableSelect(table.table_name)
                 }
               >
-                <div className="min-w-0">
+                <div className="min-w-[132px]">
                   <div className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
                     {table.table_name || table.title}
                   </div>
@@ -5302,10 +5302,44 @@ export function ThreePanelInterface() {
   return (
     <>
       <div
-        className="h-screen bg-white dark:bg-black text-black dark:text-white"
+        className="datapilot-shell flex h-screen flex-col overflow-hidden text-black dark:text-white"
         suppressHydrationWarning
       >
-        <ResizablePanelGroup direction="horizontal" className="h-full">
+        <header className="datapilot-masthead shrink-0">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="datapilot-mark" aria-hidden="true">
+              <span>DP</span>
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="datapilot-wordmark">DataPilot</span>
+                <span className="datapilot-edition">LOCAL LAB</span>
+              </div>
+              <p className="datapilot-tagline">
+                {uiLanguage === "zh"
+                  ? "让数据分析成为一条可观察、可执行的航线"
+                  : "Observable, executable routes from data to decisions"}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="datapilot-engine-status">
+              <span className="datapilot-status-dot" />
+              <span>{uiLanguage === "zh" ? "本地推理引擎" : "Local inference"}</span>
+              <strong>DeepAnalyze 8B · Q4</strong>
+            </div>
+          </div>
+        </header>
+        <div className="datapilot-routebar shrink-0" aria-hidden="true">
+          <span>01 · DATA</span>
+          <i />
+          <span>02 · REASON</span>
+          <i />
+          <span>03 · EXECUTE</span>
+          <i />
+          <span>04 · DELIVER</span>
+        </div>
+        <ResizablePanelGroup direction="horizontal" className="min-h-0 flex-1">
           {/* Left Panel - Workspace Tree */}
           <ResizablePanel defaultSize={30} minSize={20}>
             <div className="flex flex-col min-h-0 min-w-0 h-full bg-white/80 dark:bg-gray-950/80 border-r border-gray-200/70 dark:border-gray-800/70">
@@ -5789,8 +5823,8 @@ export function ThreePanelInterface() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 shrink-0 bg-white/80 dark:bg-gray-950/80">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h1 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                      Assistant
+                    <h1 className="whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      {uiLanguage === "zh" ? "分析航行日志" : "Analysis Flight Log"}
                     </h1>
                     {isTyping && (
                       <Badge variant="secondary" className="rounded-full px-2.5 py-0.5 text-xs">
@@ -5804,7 +5838,7 @@ export function ThreePanelInterface() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <div className="hidden xl:flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1.5">
+                  <div className="hidden 2xl:flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 rounded-full border border-gray-200 dark:border-gray-800 px-3 py-1.5">
                     <span>{uiLanguage === "zh" ? "自动折叠" : "Auto Collapse"}</span>
                     <Switch
                       className="data-[state=unchecked]:bg-gray-200 data-[state=unchecked]:border data-[state=unchecked]:border-gray-300"
@@ -5973,7 +6007,7 @@ export function ThreePanelInterface() {
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-4 py-2 shrink-0">
                 <div>
                   <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {uiLanguage === "zh" ? "检查栏" : "Inspector"}
+                    {uiLanguage === "zh" ? "结果观测站" : "Result Observatory"}
                   </h2>
                   <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                     {uiLanguage === "zh"

@@ -41,8 +41,11 @@ $launcher = Start-Process -FilePath $node `
     -WindowStyle Hidden `
     -PassThru
 
-Start-Sleep -Seconds 5
-$listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+$deadline = (Get-Date).AddSeconds(20)
+do {
+    Start-Sleep -Seconds 1
+    $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+} while (-not $listener -and (Get-Date) -lt $deadline)
 if (-not $listener) {
     throw "DataPilot frontend did not start. Check $logDir\frontend.stderr.log"
 }

@@ -20,6 +20,7 @@ DataPilot 是一个可在浏览器中使用的自主数据分析工作台。用�
 - Nginx + frontend + backend + mock 的 Docker Compose 一键编排
 - 上传限制、会话目录净化、外部代理关闭、执行环境密钥剥离
 - Pytest、Python compile、Next.js production build 和 Compose CI
+- 独立 DataPilot 视觉语言：分析航线式品牌头部、青绿/橙色主题、引擎状态与结果观测站
 
 ## 最快启动：不下载模型权重
 

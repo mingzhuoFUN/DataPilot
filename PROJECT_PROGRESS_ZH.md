@@ -20,6 +20,8 @@ DataPilot 基于开源项目 [ruc-datalab/DeepAnalyze](https://github.com/ruc-da
 - DataPilot 后端已接入本地 API，运行在 `127.0.0.1:8200`；真实端到端请求已生成完整分析、答案和 Markdown 报告。
 - Next.js 生产构建通过，网页运行在 `127.0.0.1:4000`；首页与 `/api/health` 代理均返回 200。
 - 已提供模型、后端、前端的独立启动/停止脚本以及整套一键脚本。
+- 已完成 DataPilot 品牌视觉重构：青绿色分析航线主题、橙色强调、独立 DP 标识、推理引擎状态区和四阶段分析路线，已明显区别于上游 DeepAnalyze WebUI。
+- 严格 CSV 端到端验收通过：经网页 `/api` 代理上传数据、按产品聚合收入、执行 Python、得到 Notebook 汇总收入 25,800，并生成 `product_revenue_summary.csv` 与 Markdown 报告。
 
 ## 当前本地启动方法
 
@@ -52,11 +54,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\stop_local.ps1
 
 ## 接下来要完成
 
-- 使用真实 CSV/Excel 在页面上完成一次人工端到端验收并保存演示截图。
-- 补充自动健康检查与更友好的启动失败提示。
-- 重新运行完整 pytest、前端构建和仓库安全检查。
-- 整理 README 中的本地权重部署说明与简历项目描述。
-- 提交并推送本轮本地部署代码到 GitHub。
+- 由项目所有者最终确认新版页面的主观视觉效果。
+- 网络恢复后推送本轮本地部署与前端重构代码到 GitHub。
 - 最后阶段再建设公网演示：公开网页不能直接暴露无认证的本地模型端口，需要认证、限流、HTTPS 和稳定的模型在线方案。
 
 ## 尚未实现

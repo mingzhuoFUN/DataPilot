@@ -39,8 +39,11 @@ $launcher = Start-Process -FilePath $python `
     -WindowStyle Hidden `
     -PassThru
 
-Start-Sleep -Seconds 8
-$listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+$deadline = (Get-Date).AddSeconds(30)
+do {
+    Start-Sleep -Seconds 2
+    $listener = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+} while (-not $listener -and (Get-Date) -lt $deadline)
 if (-not $listener) {
     throw "DataPilot backend did not start. Check $logDir\backend.stderr.log"
 }
