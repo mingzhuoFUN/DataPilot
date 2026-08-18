@@ -20,6 +20,7 @@ DataPilot 是一个可在浏览器中使用的自主数据分析工作台。用�
 - Nginx + frontend + backend + mock 的 Docker Compose 一键编排
 - 上传限制、会话目录净化、外部代理关闭、执行环境密钥剥离
 - Pytest、Python compile、Next.js production build 和 Compose CI
+- 独立 DataPilot 视觉语言：分析航线式品牌头部、青绿/橙色主题、引擎状态与结果观测站
 
 ## 最快启动：不下载模型权重
 
@@ -55,6 +56,22 @@ DATAPILOT_ALLOW_CLIENT_PROVIDER_CONFIG=false
 
 ## 本地开发
 
+### 使用本机 DeepAnalyze-8B 权重（Windows + NVIDIA GPU）
+
+本项目已在 RTX 4060 Laptop 8GB 上使用 llama.cpp Vulkan 与 Q4_K_M GGUF 完成真实推理验证。权重不包含在 Git 仓库中。当前机器配置好权重与运行时后，可在仓库根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start_local.ps1
+```
+
+随后打开 <http://127.0.0.1:4000>。停止全部服务：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\stop_local.ps1
+```
+
+完整说明见 [本地推理说明](local_inference/README_ZH.md)。
+
 ```powershell
 # 终端 1：无权重 mock
 python demo\mock_vllm\start_mock_vllmserver.py
@@ -85,6 +102,7 @@ cd ../../.. && docker compose config --quiet
 
 ## 文档
 
+- [项目介绍、进度与文件总览](PROJECT_GUIDE_ZH.md)
 - [系统架构](docs/ARCHITECTURE.md)
 - [部署与远程 API](docs/DEPLOYMENT.md)
 - [简历与面试说明](docs/PORTFOLIO.md)
@@ -94,7 +112,7 @@ cd ../../.. && docker compose config --quiet
 
 ## 权重与后续路线
 
-当前阶段故意不下载或部署 DeepAnalyze-8B 权重。真实推理可先接入任意兼容协议的远程 API；未来再把 DeepAnalyze-8B 权重放到 GPU 云服务器的持久化磁盘，通过 vLLM 暴露同一接口，无需重写 Web 产品层。
+当前开发机已经完成 DeepAnalyze-8B 的 Q4_K_M 本地量化部署，并通过 OpenAI 兼容接口接入网页。公开部署仍可选择远程兼容 API，或未来把权重迁移到 GPU 云服务器；两种方案都不需要重写 Web 产品层。
 
 仓库同时提供 `render.yaml` 与单容器 Dockerfile，可在 Render Blueprint 中创建无权重公开演示；创建云服务本身需要仓库所有者在 Render 中授权 GitHub。
 

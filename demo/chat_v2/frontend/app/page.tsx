@@ -2,7 +2,7 @@ import { ThreePanelInterface } from "@/components/three-panel-interface";
 
 export default function Home() {
   return (
-    <main className="h-screen bg-background">
+    <main className="h-screen bg-background overflow-hidden">
       <ThreePanelInterface />
     </main>
   );

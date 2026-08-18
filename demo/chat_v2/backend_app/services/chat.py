@@ -27,7 +27,16 @@ from .workspace import (
 from ..settings import CHINESE_MATPLOTLIB_BOOTSTRAP, settings
 
 
-client = openai.OpenAI(base_url=settings.api_base, api_key="dummy")
+client = openai.OpenAI(
+    base_url=settings.api_base,
+    api_key="dummy",
+    timeout=httpx.Timeout(
+        connect=settings.model_connect_timeout_sec,
+        read=settings.model_read_timeout_sec,
+        write=30.0,
+        pool=15.0,
+    ),
+)
 _STOP_EVENTS: dict[str, threading.Event] = {}
 _STOP_EVENTS_LOCK = threading.Lock()
 HEYWHALE_API_BASE = (
@@ -43,6 +52,23 @@ STRUCTURED_TAG_NAMES = ("Analyze", "Understand", "Code", "Execute", "Answer", "F
 STRUCTURED_OPEN_TAGS = tuple(f"<{tag}>" for tag in STRUCTURED_TAG_NAMES)
 STRUCTURED_TAG_PATTERN = "|".join(STRUCTURED_TAG_NAMES)
 STRUCTURED_OPEN_TAG_RE = re.compile(rf"<({STRUCTURED_TAG_PATTERN})>")
+GENERIC_ANALYSIS_SYSTEM_PROMPT = """You are DataPilot, a data-analysis agent with access to a Python execution loop.
+Respond using only these XML-style sections:
+- <Analyze>brief plan and reasoning</Analyze>
+- <Code>complete standalone Python code</Code> when computation or file inspection is needed
+- <Understand>what the execution result means</Understand>
+- <Answer>the final user-facing conclusion</Answer>
+
+After </Code>, stop immediately. The system will execute the code and send the result back in a user message beginning with '# Execute Result'. Generated files must be saved in the current working directory. Never invent file contents or execution results. Finish with exactly one <Answer> section when the task is complete."""
+
+
+def _model_http_timeout() -> httpx.Timeout:
+    return httpx.Timeout(
+        connect=settings.model_connect_timeout_sec,
+        read=settings.model_read_timeout_sec,
+        write=30.0,
+        pool=15.0,
+    )
 
 
 @dataclass(frozen=True)
@@ -258,10 +284,10 @@ def _iter_local_stream(
         messages=conversation,
         temperature=runtime_config.temperature,
         stream=True,
+        max_tokens=1024,
         extra_body={
             "add_generation_prompt": False,
             "stop_token_ids": [151676, 151645],
-            "max_new_tokens": 32768,
         },
     )
     try:
@@ -292,7 +318,7 @@ def _iter_heywhale_stream(
     if runtime_config.api_base.rstrip("/") == HEYWHALE_API_BASE.rstrip("/"):
         request_urls.append(HEYWHALE_BACKUP_CHAT_COMPLETIONS_URL)
 
-    with httpx.Client(timeout=None) as http_client:
+    with httpx.Client(timeout=_model_http_timeout()) as http_client:
         for idx, request_url in enumerate(request_urls):
             has_stream_output = False
             try:
@@ -348,7 +374,7 @@ def _iter_custom_stream(
     if runtime_config.api_key:
         headers["Authorization"] = f"Bearer {runtime_config.api_key}"
 
-    with httpx.Client(timeout=None) as http_client:
+    with httpx.Client(timeout=_model_http_timeout()) as http_client:
         with http_client.stream(
             "POST",
             f"{runtime_config.api_base.rstrip('/')}/chat/completions",
@@ -459,6 +485,16 @@ def bot_stream(
     if conversation and conversation[0].get("role") == "assistant":
         conversation = conversation[1:]
 
+    if not _is_deepanalyze_model(runtime_config.model):
+        has_system_message = any(
+            str(message.get("role") or "") == "system" for message in conversation
+        )
+        if not has_system_message:
+            conversation.insert(
+                0,
+                {"role": "system", "content": GENERIC_ANALYSIS_SYSTEM_PROMPT},
+            )
+
     _build_user_prompt(conversation, workspace_paths, workspace_dir)
 
     initial_workspace = {
@@ -468,9 +504,19 @@ def bot_stream(
     should_patch_first_assistant_message = not any(
         str(message.get("role") or "") == "assistant" for message in conversation
     )
+    analysis_round = 0
 
     try:
         while not finished:
+            analysis_round += 1
+            if analysis_round > settings.max_analysis_rounds:
+                yield (
+                    "\n<Answer>\n"
+                    "分析已达到安全轮次上限，系统已停止继续调用模型。"
+                    "请缩小问题范围、清空较早对话后重试，或使用上下文更大的 API 模型。"
+                    "\n</Answer>"
+                )
+                break
             if stop_event.is_set():
                 break
 

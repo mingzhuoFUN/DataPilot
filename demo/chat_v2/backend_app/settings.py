@@ -90,6 +90,9 @@ class Settings:
     allow_external_proxy: bool = _get_bool_env("DATAPILOT_ALLOW_EXTERNAL_PROXY", False)
     execution_mode: str = _env("DATAPILOT_EXECUTION_MODE", "DEEPANALYZE_EXECUTION_MODE", "local")
     execution_timeout_sec: int = int(_env("DATAPILOT_EXECUTION_TIMEOUT_SEC", "DEEPANALYZE_EXECUTION_TIMEOUT_SEC", "120"))
+    model_connect_timeout_sec: int = int(os.getenv("DATAPILOT_MODEL_CONNECT_TIMEOUT_SEC", "15"))
+    model_read_timeout_sec: int = int(os.getenv("DATAPILOT_MODEL_READ_TIMEOUT_SEC", "180"))
+    max_analysis_rounds: int = int(os.getenv("DATAPILOT_MAX_ANALYSIS_ROUNDS", "8"))
     docker_image: str = _env("DATAPILOT_DOCKER_IMAGE", "DEEPANALYZE_DOCKER_IMAGE", "datapilot-exec:latest")
     docker_container_name: str = os.getenv(
         "DATAPILOT_DOCKER_CONTAINER_NAME",

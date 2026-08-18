@@ -4,29 +4,28 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light theme - white background, black text */
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #f8f8f8;
-  --card-foreground: #000000;
+  --background: #f4f7f5;
+  --foreground: #102a2b;
+  --card: #fbfdfb;
+  --card-foreground: #102a2b;
   --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #000000;
+  --popover-foreground: #102a2b;
+  --primary: #0c6b61;
   --primary-foreground: #ffffff;
-  --secondary: #f1f1f1;
-  --secondary-foreground: #000000;
-  --muted: #f8f8f8;
-  --muted-foreground: #666666;
-  --accent: #000000;
+  --secondary: #e5efeb;
+  --secondary-foreground: #174743;
+  --muted: #edf3f0;
+  --muted-foreground: #647875;
+  --accent: #e86f3a;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
+  --border: #ccdcd6;
   --input: #ffffff;
-  --ring: rgba(0, 0, 0, 0.3);
-  --radius: 0.5rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
+  --ring: rgba(12, 107, 97, 0.32);
+  --radius: 0.75rem;
+  --sidebar: #f8fbf9;
+  --sidebar-foreground: #102a2b;
   --sidebar-primary: #ffffff;
   --sidebar-primary-foreground: #000000;
   --sidebar-accent: #000000;
@@ -36,27 +35,26 @@
 }
 
 .dark {
-  /* Dark theme - black background, white text */
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #1a1a1a;
-  --card-foreground: #ffffff;
-  --popover: #1a1a1a;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #333333;
-  --secondary-foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: #a3a3a3;
-  --accent: #ffffff;
-  --accent-foreground: #000000;
+  --background: #071817;
+  --foreground: #e8f4ef;
+  --card: #0c2220;
+  --card-foreground: #e8f4ef;
+  --popover: #0c2220;
+  --popover-foreground: #e8f4ef;
+  --primary: #5dd1bc;
+  --primary-foreground: #06211d;
+  --secondary: #15322f;
+  --secondary-foreground: #d7eee7;
+  --muted: #102926;
+  --muted-foreground: #91aaa4;
+  --accent: #ff8b5b;
+  --accent-foreground: #1d0b04;
   --destructive: #ffffff;
   --destructive-foreground: #000000;
-  --border: #333333;
-  --input: #1a1a1a;
-  --ring: rgba(255, 255, 255, 0.3);
-  --sidebar: #000000;
+  --border: #24433f;
+  --input: #0c2220;
+  --ring: rgba(93, 209, 188, 0.34);
+  --sidebar: #091c1a;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #000000;
   --sidebar-primary-foreground: #ffffff;
@@ -113,6 +111,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image:
+      linear-gradient(rgba(12, 107, 97, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(12, 107, 97, 0.035) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
   /* Added code highlighting styles */
@@ -282,5 +284,156 @@
   
   .animate-shimmer {
     animation: shimmer 2s infinite;
+  }
+}
+
+@layer components {
+  .datapilot-shell {
+    background:
+      radial-gradient(circle at 8% 0%, rgba(87, 194, 169, 0.14), transparent 25rem),
+      radial-gradient(circle at 92% 100%, rgba(232, 111, 58, 0.10), transparent 28rem),
+      var(--background);
+  }
+
+  .datapilot-masthead {
+    display: flex;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+    padding: 0.7rem 1.1rem;
+    background: color-mix(in srgb, var(--background) 88%, transparent);
+    backdrop-filter: blur(18px);
+  }
+
+  .datapilot-mark {
+    position: relative;
+    display: grid;
+    height: 42px;
+    width: 42px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 14px 5px 14px 5px;
+    color: #f7fffc;
+    background: linear-gradient(145deg, #0c6b61, #093f3b);
+    box-shadow: 0 10px 25px rgba(7, 80, 72, 0.22);
+  }
+
+  .datapilot-mark::after {
+    content: "";
+    position: absolute;
+    right: -7px;
+    bottom: -10px;
+    height: 25px;
+    width: 25px;
+    border-radius: 999px;
+    background: #e86f3a;
+    opacity: 0.92;
+  }
+
+  .datapilot-mark span {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
+  .datapilot-wordmark {
+    color: var(--foreground);
+    font-size: 1.05rem;
+    font-weight: 760;
+    letter-spacing: -0.025em;
+  }
+
+  .datapilot-edition {
+    border: 1px solid color-mix(in srgb, var(--primary) 32%, transparent);
+    border-radius: 999px;
+    padding: 0.13rem 0.45rem;
+    color: var(--primary);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.57rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .datapilot-tagline {
+    margin-top: 0.12rem;
+    overflow: hidden;
+    color: var(--muted-foreground);
+    font-size: 0.69rem;
+    line-height: 1.1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .datapilot-engine-status {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+    color: var(--muted-foreground);
+    background: color-mix(in srgb, var(--card) 78%, transparent);
+    font-size: 0.66rem;
+    box-shadow: 0 8px 28px rgba(16, 42, 43, 0.06);
+  }
+
+  .datapilot-engine-status strong {
+    color: var(--foreground);
+    font-family: var(--font-mono), monospace;
+    font-weight: 650;
+  }
+
+  .datapilot-status-dot {
+    height: 7px;
+    width: 7px;
+    border-radius: 999px;
+    background: #24a879;
+    box-shadow: 0 0 0 4px rgba(36, 168, 121, 0.12);
+  }
+
+  .datapilot-routebar {
+    display: flex;
+    height: 25px;
+    align-items: center;
+    gap: 0.65rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    padding: 0 1.1rem;
+    color: color-mix(in srgb, var(--muted-foreground) 86%, transparent);
+    background: color-mix(in srgb, var(--secondary) 68%, transparent);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.55rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+  }
+
+  .datapilot-routebar i {
+    height: 1px;
+    width: clamp(18px, 4vw, 58px);
+    background: linear-gradient(90deg, var(--primary), transparent);
+  }
+
+  .datapilot-shell [data-slot="card"] {
+    box-shadow: 0 10px 30px rgba(16, 42, 43, 0.055);
+  }
+
+  .datapilot-shell [data-panel-group-direction="horizontal"] > [data-panel] {
+    background: color-mix(in srgb, var(--background) 55%, transparent);
+  }
+}
+
+@media (max-width: 900px) {
+  .datapilot-engine-status span,
+  .datapilot-tagline,
+  .datapilot-routebar {
+    display: none;
+  }
+  .datapilot-masthead {
+    min-height: 58px;
+    padding: 0.5rem 0.75rem;
   }
 }
