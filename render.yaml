@@ -5,7 +5,6 @@ services:
     plan: free
     dockerfilePath: ./deploy/Dockerfile.all-in-one
     healthCheckPath: /api/health
-    maxShutdownDelaySeconds: 30
     envVars:
       - key: PORT
         value: 8080
