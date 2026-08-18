@@ -28,7 +28,7 @@ $arguments = @(
     "--alias", "DeepAnalyze-8B",
     "--device", "Vulkan1",
     "--gpu-layers", "all",
-    "--ctx-size", "4096",
+    "--ctx-size", "8192",
     "--batch-size", "256",
     "--ubatch-size", "128",
     "--parallel", "1",

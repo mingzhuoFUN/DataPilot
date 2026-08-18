@@ -10,12 +10,24 @@ services:
       - key: PORT
         value: 8080
       - key: DATAPILOT_MODEL_PROVIDER
-        value: local
+        value: custom
       - key: DATAPILOT_MODEL_API_BASE
-        value: http://127.0.0.1:8000/v1
+        value: https://dashscope.aliyuncs.com/compatible-mode/v1
       - key: DATAPILOT_MODEL_NAME
-        value: DeepAnalyze-8B
+        value: qwen-plus
       - key: DATAPILOT_ALLOW_CLIENT_PROVIDER_CONFIG
         value: "false"
       - key: DATAPILOT_MODEL_API_KEY
         sync: false
+      - key: DATAPILOT_SITE_USERNAME
+        value: datapilot
+      - key: DATAPILOT_SITE_PASSWORD
+        sync: false
+      - key: DATAPILOT_MAX_UPLOAD_MB
+        value: "10"
+      - key: DATAPILOT_EXECUTION_TIMEOUT_SEC
+        value: "45"
+      - key: DATAPILOT_MODEL_READ_TIMEOUT_SEC
+        value: "180"
+      - key: DATAPILOT_MAX_ANALYSIS_ROUNDS
+        value: "6"

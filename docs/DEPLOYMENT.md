@@ -16,6 +16,21 @@ docker compose ps
 
 单容器模式默认使用临时工作区，适合作品集演示。若需要长期保存用户文件，应选择持久磁盘并挂载到 `/app/workspace`。
 
+当前 `render.yaml` 默认连接阿里云百炼千问：
+
+```dotenv
+DATAPILOT_MODEL_PROVIDER=custom
+DATAPILOT_MODEL_API_BASE=https://dashscope.aliyuncs.com/compatible-mode/v1
+DATAPILOT_MODEL_NAME=qwen-plus
+```
+
+创建 Blueprint 时必须填写两个 Secret：
+
+- `DATAPILOT_MODEL_API_KEY`：阿里云百炼 API Key。
+- `DATAPILOT_SITE_PASSWORD`：公开预览站的访问口令。
+
+访问用户名默认为 `datapilot`。不要将以上两个 Secret 提交到 Git。
+
 ## 方案 B：远程 OpenAI 兼容 API
 
 在 `.env` 或托管平台 Secret 中设置：
