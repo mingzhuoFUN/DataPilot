@@ -102,6 +102,7 @@ cd ../../.. && docker compose config --quiet
 
 ## 文档
 
+- [项目介绍、进度与文件总览](PROJECT_GUIDE_ZH.md)
 - [系统架构](docs/ARCHITECTURE.md)
 - [部署与远程 API](docs/DEPLOYMENT.md)
 - [简历与面试说明](docs/PORTFOLIO.md)
