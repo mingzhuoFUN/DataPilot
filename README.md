@@ -5,6 +5,12 @@
 
 DataPilot 是一个可在浏览器中使用的自主数据分析工作台。用户可以上传 CSV、Excel、数据库或文档，以自然语言描述任务，并查看模型的流式分析、Python 执行、图表与可下载报告。
 
+## 在线体验
+
+公开网站：[https://datapilot-cloud.fmingzhuo.chatgpt.site](https://datapilot-cloud.fmingzhuo.chatgpt.site)
+
+在线版支持阿里千问、OpenAI 及其他 OpenAI 兼容 API。API Key 仅用于当前分析请求，不会写入代码仓库或浏览器存储。
+
 本仓库以 [ruc-datalab/DeepAnalyze](https://github.com/ruc-datalab/DeepAnalyze) 的开源代码为基础，保留其 WebUI 视觉基准、模型协议、训练和评测资源，在此基础上完成远程模型配置、安全边界、容器化和持续集成。项目不声称训练了 DeepAnalyze-8B，详细归属见 [UPSTREAM.md](UPSTREAM.md)。
 
 ![DeepAnalyze WebUI baseline in the packaged project](docs/assets/datapilot-web.png)
